@@ -14,17 +14,20 @@ public class IngredientTest {
 
     @Before
     public void setUp() {
-        expectedName = "sochnayaKotleta";
-        expectedPrice = 123;
-        ingredient = new Ingredient(IngredientType.FILLING, expectedName, expectedPrice);
+
+        Database database = new Database();
+
+        ingredient = database.availableIngredients().get(0);
+
+        expectedName = ingredient.name;
+        expectedPrice = ingredient.price;
     }
 
     @Test
     public void getPriceReturnsCorrectValue() {
 
         float actualPrice = ingredient.getPrice();
-        assertEquals("getPrice method returns incorrect value", expectedPrice, actualPrice, 0);
-
+        assertEquals("getPrice method returns incorrect value", expectedPrice, actualPrice, 1e-16);
     }
 
     @Test

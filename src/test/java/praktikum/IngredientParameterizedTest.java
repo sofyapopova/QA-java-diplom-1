@@ -27,8 +27,8 @@ public class IngredientParameterizedTest {
     public void getTypeReturnsCorrectValue() {
         Ingredient ingredient = new Ingredient(ingredientType, "sochnayaKotleta", 123);
 
-        IngredientType actualResult = ingredient.getType();
+        IngredientType actualIngredientType = ingredient.getType();
 
-        assertEquals("getType method returns incorrect value", ingredientType, actualResult);
+        assertEquals("getType method returns incorrect value", ingredientType, actualIngredientType);
     }
 }
