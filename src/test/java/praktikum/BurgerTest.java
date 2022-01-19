@@ -8,7 +8,6 @@ import static org.junit.Assert.*;
 public class BurgerTest {
 
     private Burger burger;
-
     private Database database;
 
     private Bun bun;
@@ -17,7 +16,6 @@ public class BurgerTest {
     @Before
     public void setUp() {
         burger = new Burger();
-
         database = new Database();
     }
 
