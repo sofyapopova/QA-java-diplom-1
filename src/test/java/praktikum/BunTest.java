@@ -15,12 +15,10 @@ public class BunTest {
     @Before
     public void setUp() {
 
-        Database database = new Database();
+        expectedName = "bulochka";
+        expectedPrice = 124;
 
-        bun = database.availableBuns().get(0);
-
-        expectedName = bun.name;
-        expectedPrice = bun.price;
+        bun = new Bun(expectedName, expectedPrice);
     }
 
     @Test

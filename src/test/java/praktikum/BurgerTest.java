@@ -2,42 +2,40 @@ package praktikum;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.Assert.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class BurgerTest {
 
     private Burger burger;
-    private Database database;
-
-    private Bun bun;
-    private Ingredient ingredient;
 
     @Before
     public void setUp() {
         burger = new Burger();
-        database = new Database();
     }
 
+    @Mock
+    Bun bun;
+
+    @Mock
+    Ingredient ingredient;
+
     @Test
-    public void setBunsWorksCorrect() {
-        bun = database.availableBuns().get(0);
+    public void setBunsCanBeCalled() {
 
-        String expectedBunName = bun.name;
-        float expectedBunPrice = bun.price;
+        Burger spyBurger = Mockito.spy(burger);
 
-        burger.setBuns(bun);
-
-        String actualBunName = burger.bun.name;
-        float actualBunPrice = burger.bun.price;
-
-        assertEquals("setBuns method works incorrect", expectedBunName, actualBunName);
-        assertEquals("setBuns method works incorrect", expectedBunPrice, actualBunPrice, 1e-16);
+        spyBurger.setBuns(bun);
+        Mockito.verify(spyBurger).setBuns(bun);
     }
 
     @Test
     public void addIngredientWorksCorrect() {
-        ingredient = database.availableIngredients().get(0);
 
         burger.addIngredient(ingredient);
 
@@ -46,7 +44,7 @@ public class BurgerTest {
 
     @Test
     public void removeIngredientWorksCorrect() {
-        ingredient = database.availableIngredients().get(0);
+
         burger.ingredients.add(ingredient);
 
         burger.removeIngredient((burger.ingredients.lastIndexOf(ingredient)));
@@ -56,8 +54,8 @@ public class BurgerTest {
 
     @Test
     public void moveIngredientWorksCorrect() {
-        ingredient = database.availableIngredients().get(0);
-        Ingredient extraIngredient = database.availableIngredients().get(1);
+
+        Ingredient extraIngredient = Mockito.mock(Ingredient.class);
         burger.ingredients.add(ingredient);
         burger.ingredients.add(extraIngredient);
 
@@ -65,5 +63,46 @@ public class BurgerTest {
 
         assertEquals("moveIngredient method works incorrect", burger.ingredients.get(0), extraIngredient);
         assertEquals("moveIngredient method works incorrect", burger.ingredients.get(1), ingredient);
+    }
+
+    @Test
+    public void getPriceReturnsCorrectValue() {
+
+        float expectedBurgerPrice = 600;
+
+        Mockito.when(bun.getPrice()).thenReturn(100F);
+        Mockito.when(ingredient.getPrice()).thenReturn(200F);
+
+        burger.setBuns(bun);
+        burger.addIngredient(ingredient);
+        burger.addIngredient(ingredient);
+
+        float actualBurgerPrice = burger.getPrice();
+
+        assertEquals("getPrice method returns incorrect value", expectedBurgerPrice, actualBurgerPrice, 1e-16);
+    }
+
+    @Test
+    public void getReceiptReturnsCorrectValue() {
+
+        String expectedReceipt = String.format("(==== Bulochka ====)%n" +
+                "= filling sochnayaKotleta =%n" +
+                "= filling sochnayaKotleta =%n" +
+                "(==== Bulochka ====)%n" +
+                "%nPrice: 600,000000%n");
+
+        Mockito.when(bun.getName()).thenReturn("Bulochka");
+        Mockito.when(ingredient.getType()).thenReturn(IngredientType.FILLING);
+        Mockito.when(ingredient.getName()).thenReturn("sochnayaKotleta");
+        Mockito.when(bun.getPrice()).thenReturn(100F);
+        Mockito.when(ingredient.getPrice()).thenReturn(200F);
+
+        burger.setBuns(bun);
+        burger.addIngredient(ingredient);
+        burger.addIngredient(ingredient);
+
+        String actualReceipt = burger.getReceipt();
+
+        assertEquals("getReceipt method return incorrect value", expectedReceipt, actualReceipt);
     }
 }

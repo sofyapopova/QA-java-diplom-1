@@ -15,12 +15,10 @@ public class IngredientTest {
     @Before
     public void setUp() {
 
-        Database database = new Database();
+        expectedName = "sochnayaKotleta";
+        expectedPrice = 123;
 
-        ingredient = database.availableIngredients().get(0);
-
-        expectedName = ingredient.name;
-        expectedPrice = ingredient.price;
+        ingredient = new Ingredient(IngredientType.FILLING, expectedName, expectedPrice);
     }
 
     @Test
